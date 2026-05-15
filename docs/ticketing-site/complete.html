@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StagePass - 예매 완료</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="index.html">
+        <span class="mark">S</span>
+        <span>StagePass</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">공연</a>
+        <a href="queue.html">대기열</a>
+        <a href="seats.html">좌석</a>
+        <a href="payment.html">결제</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="panel">
+      <div class="screen-title">
+        <div>
+          <h2>예매 완료</h2>
+          <p class="muted">결제가 성공하면 Reservation은 CONFIRMED, Seat는 RESERVED 상태가 됩니다.</p>
+        </div>
+        <span class="badge green">CONFIRMED</span>
+      </div>
+      <div class="info-grid">
+        <div class="info">
+          <span>공연</span>
+          <b>Midnight Echo Live</b>
+        </div>
+        <div class="info">
+          <span>좌석</span>
+          <b>A구역 7번</b>
+        </div>
+        <div class="info">
+          <span>결제 상태</span>
+          <b>SUCCESS</b>
+        </div>
+      </div>
+      <a class="btn primary" href="index.html">처음으로</a>
+      <a class="btn" href="seats.html">다른 좌석 보기</a>
+    </div>
+    <footer>Static HTML prototype · Spring Boot API 연동 전 화면 시안</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StagePass - 공연 선택</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="index.html">
+        <span class="mark">S</span>
+        <span>StagePass</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">공연</a>
+        <a href="queue.html">대기열</a>
+        <a href="seats.html">좌석</a>
+        <a href="payment.html">결제</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="app-shell">
+      <aside class="panel">
+        <h3>예매 가능 공연</h3>
+        <p class="muted">오늘 오픈된 공연입니다.</p>
+        <div class="concert-list">
+          <a class="mini-concert" href="queue.html">
+            <strong>Midnight Echo Live</strong>
+            <span class="muted">KSPO Dome · 19:30</span>
+          </a>
+          <a class="mini-concert" href="queue.html">
+            <strong>Blue Hour Festival</strong>
+            <span class="muted">Olympic Hall · 18:00</span>
+          </a>
+          <a class="mini-concert" href="queue.html">
+            <strong>Spring Stage 2026</strong>
+            <span class="muted">Jamsil Arena · 20:00</span>
+          </a>
+        </div>
+      </aside>
+
+      <article class="card featured">
+        <div class="poster">
+          <div class="poster-title">
+            <span>OPEN TODAY</span>
+            <b>Midnight Echo Live</b>
+          </div>
+          <div class="poster-meta">
+            <span>2026.06.21 SUN</span>
+            <span>KSPO DOME</span>
+            <span>VIP 154,000 · R 121,000</span>
+          </div>
+        </div>
+
+        <div class="feature-body">
+          <div>
+            <h1>원하는 좌석을 빠르게 선택하세요</h1>
+            <p class="muted">대기열을 통과한 뒤 좌석을 선택하고 5분 안에 결제를 완료하면 예매가 확정됩니다.</p>
+            <div class="info-grid">
+              <div class="info">
+                <span>남은 좌석</span>
+                <b>1,284석</b>
+              </div>
+              <div class="info">
+                <span>예매 오픈</span>
+                <b>오늘 20:00</b>
+              </div>
+              <div class="info">
+                <span>대기 인원</span>
+                <b>2,350명</b>
+              </div>
+            </div>
+            <div class="status-row">
+              <span class="badge green">AVAILABLE</span>
+              <span class="badge amber">HOLD 5분</span>
+              <span class="badge blue">entryToken 필요</span>
+            </div>
+          </div>
+          <div>
+            <a class="btn primary" href="queue.html">예매 시작</a>
+            <a class="btn" href="seats.html">좌석 먼저 보기</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
