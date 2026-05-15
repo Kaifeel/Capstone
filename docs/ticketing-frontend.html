@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StagePass Ticketing</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --ink: #14171f;
+      --text: #384152;
+      --muted: #768092;
+      --line: #dce2ea;
+      --blue: #1d4ed8;
+      --blue-soft: #e8f0ff;
+      --green: #15803d;
+      --green-soft: #e9f8ef;
+      --amber: #b45309;
+      --amber-soft: #fff4dc;
+      --red: #dc2626;
+      --red-soft: #fee8e8;
+      --dark: #202636;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+    }
+
+    nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--ink);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--dark);
+      color: white;
+      font-size: 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav-links a,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: white;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 20px 56px;
+    }
+
+    section {
+      min-height: calc(100vh - 64px);
+      padding: 22px 0 36px;
+      scroll-margin-top: 70px;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: 34px;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .screen-title {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .concert-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mini-concert {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .mini-concert strong {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .featured {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: minmax(240px, 360px) 1fr;
+      overflow: hidden;
+    }
+
+    .poster {
+      position: relative;
+      min-height: 520px;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 18%),
+        linear-gradient(145deg, #121827 0%, #26324d 42%, #a93f35 100%);
+      color: white;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .poster::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 104px;
+      height: 160px;
+      border-radius: 140px 140px 8px 8px;
+      border: 2px solid rgba(255, 255, 255, 0.38);
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .poster-title {
+      position: relative;
+      max-width: 260px;
+    }
+
+    .poster-title span {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      opacity: 0.82;
+    }
+
+    .poster-title b {
+      display: block;
+      font-size: 42px;
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+
+    .poster-meta {
+      position: relative;
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .feature-body {
+      padding: 28px;
+      display: grid;
+      align-content: space-between;
+      gap: 28px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .info {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .info span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .info b {
+      color: var(--ink);
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .badge.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .badge.amber {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .badge.blue {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 18px;
+    }
+
+    .queue-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 8px;
+      background: #fbfcfe;
+      border: 1px solid var(--line);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .metric b {
+      color: var(--ink);
+      font-size: 28px;
+    }
+
+    .progress {
+      height: 12px;
+      border-radius: 99px;
+      background: #e8edf4;
+      overflow: hidden;
+      margin: 22px 0 10px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 68%;
+      background: var(--blue);
+    }
+
+    .stage {
+      width: 72%;
+      min-height: 54px;
+      margin: 0 auto 22px;
+      border-radius: 8px 8px 36px 36px;
+      background: var(--dark);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .seat-map {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+
+    .seat-row {
+      display: grid;
+      grid-template-columns: 24px repeat(12, 1fr);
+      gap: 7px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .row-label {
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .seat {
+      aspect-ratio: 1;
+      min-width: 28px;
+      border-radius: 7px 7px 11px 11px;
+      border: 1px solid #b7c5d8;
+      background: #f8fafc;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .seat.available {
+      background: var(--green-soft);
+      border-color: #8fd8a9;
+      color: var(--green);
+    }
+
+    .seat.hold {
+      background: var(--amber-soft);
+      border-color: #f1c66b;
+      color: var(--amber);
+    }
+
+    .seat.reserved {
+      background: var(--red-soft);
+      border-color: #f3a8a8;
+      color: var(--red);
+      cursor: not-allowed;
+    }
+
+    .seat.selected {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+      box-shadow: 0 0 0 3px var(--blue-soft);
+    }
+
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      border-radius: 3px;
+      vertical-align: -1px;
+    }
+
+    .summary {
+      position: sticky;
+      top: 86px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .summary-row b {
+      color: var(--ink);
+    }
+
+    .total {
+      font-size: 24px;
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .pay-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .pay-method {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .method {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .method.selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    footer {
+      padding: 20px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 920px) {
+      .app-shell,
+      .featured,
+      .layout,
+      .pay-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .poster {
+        min-height: 360px;
+      }
+
+      .queue-box,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        position: static;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .screen-title {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .seat-row {
+        grid-template-columns: 20px repeat(6, 1fr);
+      }
+
+      .seat-row .seat:nth-child(n+8) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="#home" aria-label="StagePass home">
+        <span class="mark">S</span>
+        <span>StagePass</span>
+      </a>
+      <div class="nav-links">
+        <a href="#home">공연</a>
+        <a href="#queue">대기열</a>
+        <a href="#seats">좌석</a>
+        <a href="#payment">결제</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home">
+      <div class="app-shell">
+        <aside class="panel">
+          <h3>예매 가능 공연</h3>
+          <p class="muted">오늘 오픈된 공연입니다.</p>
+          <div class="concert-list">
+            <a class="mini-concert" href="#queue">
+              <strong>Midnight Echo Live</strong>
+              <span class="muted">KSPO Dome · 19:30</span>
+            </a>
+            <a class="mini-concert" href="#queue">
+              <strong>Blue Hour Festival</strong>
+              <span class="muted">Olympic Hall · 18:00</span>
+            </a>
+            <a class="mini-concert" href="#queue">
+              <strong>Spring Stage 2026</strong>
+              <span class="muted">Jamsil Arena · 20:00</span>
+            </a>
+          </div>
+        </aside>
+
+        <article class="card featured">
+          <div class="poster" aria-label="concert poster">
+            <div class="poster-title">
+              <span>OPEN TODAY</span>
+              <b>Midnight Echo Live</b>
+            </div>
+            <div class="poster-meta">
+              <span>2026.06.21 SUN</span>
+              <span>KSPO DOME</span>
+              <span>VIP 154,000 · R 121,000</span>
+            </div>
+          </div>
+
+          <div class="feature-body">
+            <div>
+              <h1>원하는 좌석을 빠르게 선택하세요</h1>
+              <p class="muted">대기열을 통과한 뒤 좌석을 선택하고 5분 안에 결제를 완료하면 예매가 확정됩니다.</p>
+              <div class="info-grid">
+                <div class="info">
+                  <span>남은 좌석</span>
+                  <b>1,284석</b>
+                </div>
+                <div class="info">
+                  <span>예매 오픈</span>
+                  <b>오늘 20:00</b>
+                </div>
+                <div class="info">
+                  <span>대기 인원</span>
+                  <b>2,350명</b>
+                </div>
+              </div>
+              <div class="status-row">
+                <span class="badge green">AVAILABLE</span>
+                <span class="badge amber">HOLD 5분</span>
+                <span class="badge blue">entryToken 필요</span>
+              </div>
+            </div>
+            <div>
+              <a class="btn primary" href="#queue">예매 시작</a>
+              <a class="btn" href="#seats">좌석 먼저 보기</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="queue">
+      <div class="screen-title">
+        <div>
+          <h2>대기열</h2>
+          <p class="muted">입장 가능 상태가 되면 좌석 선택 화면으로 이동합니다.</p>
+        </div>
+        <a class="btn" href="#home">공연 변경</a>
+      </div>
+
+      <div class="panel">
+        <h3>Midnight Echo Live 입장 대기</h3>
+        <div class="queue-box">
+          <div class="metric">
+            <span>내 순번</span>
+            <b>184</b>
+          </div>
+          <div class="metric">
+            <span>예상 대기</span>
+            <b>02:10</b>
+          </div>
+          <div class="metric">
+            <span>입장 처리</span>
+            <b>68%</b>
+          </div>
+        </div>
+        <div class="progress"><span></span></div>
+        <p class="muted">Redis Sorted Set 기준으로 순번이 계산됩니다. 입장 허용 후 entryToken이 발급됩니다.</p>
+        <div class="status-row">
+          <span class="badge blue">WAITING</span>
+          <span class="badge green">상위 N명 승격</span>
+          <span class="badge amber">토큰 TTL 적용</span>
+        </div>
+        <div style="margin-top: 24px;">
+          <a class="btn primary" href="#seats">입장 완료: 좌석 선택</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="seats">
+      <div class="screen-title">
+        <div>
+          <h2>좌석 선택</h2>
+          <p class="muted">파란색 좌석 A07이 선택된 상태입니다. 결제 전까지 좌석은 HOLD로 유지됩니다.</p>
+        </div>
+        <a class="btn" href="#queue">대기열 보기</a>
+      </div>
+
+      <div class="layout">
+        <div class="panel">
+          <div class="stage">STAGE</div>
+          <div class="seat-map" aria-label="seat map">
+            <div class="seat-row">
+              <span class="row-label">A</span>
+              <a class="seat available" href="#payment">1</a>
+              <a class="seat available" href="#payment">2</a>
+              <span class="seat reserved">3</span>
+              <a class="seat available" href="#payment">4</a>
+              <span class="seat hold">5</span>
+              <a class="seat available" href="#payment">6</a>
+              <a class="seat selected" href="#payment">7</a>
+              <a class="seat available" href="#payment">8</a>
+              <span class="seat reserved">9</span>
+              <a class="seat available" href="#payment">10</a>
+              <a class="seat available" href="#payment">11</a>
+              <a class="seat available" href="#payment">12</a>
+            </div>
+            <div class="seat-row">
+              <span class="row-label">B</span>
+              <a class="seat available" href="#payment">1</a>
+              <span class="seat reserved">2</span>
+              <a class="seat available" href="#payment">3</a>
+              <a class="seat available" href="#payment">4</a>
+              <a class="seat available" href="#payment">5</a>
+              <span class="seat hold">6</span>
+              <a class="seat available" href="#payment">7</a>
+              <a class="seat available" href="#payment">8</a>
+              <a class="seat available" href="#payment">9</a>
+              <span class="seat reserved">10</span>
+              <a class="seat available" href="#payment">11</a>
+              <a class="seat available" href="#payment">12</a>
+            </div>
+            <div class="seat-row">
+              <span class="row-label">C</span>
+              <a class="seat available" href="#payment">1</a>
+              <a class="seat available" href="#payment">2</a>
+              <a class="seat available" href="#payment">3</a>
+              <span class="seat reserved">4</span>
+              <a class="seat available" href="#payment">5</a>
+              <a class="seat available" href="#payment">6</a>
+              <span class="seat hold">7</span>
+              <a class="seat available" href="#payment">8</a>
+              <a class="seat available" href="#payment">9</a>
+              <a class="seat available" href="#payment">10</a>
+              <a class="seat available" href="#payment">11</a>
+              <span class="seat reserved">12</span>
+            </div>
+            <div class="seat-row">
+              <span class="row-label">D</span>
+              <a class="seat available" href="#payment">1</a>
+              <a class="seat available" href="#payment">2</a>
+              <a class="seat available" href="#payment">3</a>
+              <a class="seat available" href="#payment">4</a>
+              <a class="seat available" href="#payment">5</a>
+              <a class="seat available" href="#payment">6</a>
+              <a class="seat available" href="#payment">7</a>
+              <span class="seat reserved">8</span>
+              <a class="seat available" href="#payment">9</a>
+              <a class="seat available" href="#payment">10</a>
+              <span class="seat hold">11</span>
+              <a class="seat available" href="#payment">12</a>
+            </div>
+          </div>
+          <div class="legend">
+            <span><i style="background: var(--green-soft); border: 1px solid #8fd8a9;"></i>예매 가능</span>
+            <span><i style="background: var(--blue);"></i>선택</span>
+            <span><i style="background: var(--amber-soft); border: 1px solid #f1c66b;"></i>결제 대기</span>
+            <span><i style="background: var(--red-soft); border: 1px solid #f3a8a8;"></i>예매 완료</span>
+          </div>
+        </div>
+
+        <aside class="panel summary">
+          <h3>선택 정보</h3>
+          <div class="summary-row">
+            <span>공연</span>
+            <b>Midnight Echo Live</b>
+          </div>
+          <div class="summary-row">
+            <span>좌석</span>
+            <b>A구역 7번</b>
+          </div>
+          <div class="summary-row">
+            <span>상태</span>
+            <b>HOLD</b>
+          </div>
+          <div class="summary-row">
+            <span>남은 결제 시간</span>
+            <b>04:58</b>
+          </div>
+          <div class="summary-row">
+            <span>가격</span>
+            <b>154,000원</b>
+          </div>
+          <p class="total">154,000원</p>
+          <div style="margin-top: 18px;">
+            <a class="btn primary" href="#payment">결제하기</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="payment">
+      <div class="screen-title">
+        <div>
+          <h2>결제</h2>
+          <p class="muted">Mock 결제 화면입니다. 실제 카드 정보는 수집하지 않습니다.</p>
+        </div>
+        <a class="btn" href="#seats">좌석 다시 선택</a>
+      </div>
+
+      <div class="pay-grid">
+        <div class="panel">
+          <h3>결제 수단</h3>
+          <div class="pay-method">
+            <a class="method selected" href="#complete">
+              <span>간편 결제</span>
+              <span>선택됨</span>
+            </a>
+            <a class="method" href="#complete">
+              <span>신용카드</span>
+              <span>선택</span>
+            </a>
+            <a class="method" href="#complete">
+              <span>무통장 입금</span>
+              <span>선택</span>
+            </a>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <h3>결제 요약</h3>
+          <div class="summary-row">
+            <span>예약 번호</span>
+            <b>R-20260515-0007</b>
+          </div>
+          <div class="summary-row">
+            <span>예매 상태</span>
+            <b>PENDING</b>
+          </div>
+          <div class="summary-row">
+            <span>좌석 상태</span>
+            <b>HOLD</b>
+          </div>
+          <div class="summary-row">
+            <span>결제 금액</span>
+            <b>154,000원</b>
+          </div>
+          <p class="total">154,000원</p>
+          <div style="margin-top: 18px;">
+            <a class="btn primary" href="#complete">Mock 결제 완료</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="complete">
+      <div class="panel">
+        <div class="screen-title">
+          <div>
+            <h2>예매 완료</h2>
+            <p class="muted">결제가 성공하면 Reservation은 CONFIRMED, Seat는 RESERVED 상태가 됩니다.</p>
+          </div>
+          <span class="badge green">CONFIRMED</span>
+        </div>
+        <div class="info-grid">
+          <div class="info">
+            <span>공연</span>
+            <b>Midnight Echo Live</b>
+          </div>
+          <div class="info">
+            <span>좌석</span>
+            <b>A구역 7번</b>
+          </div>
+          <div class="info">
+            <span>결제 상태</span>
+            <b>SUCCESS</b>
+          </div>
+        </div>
+        <a class="btn primary" href="#home">처음으로</a>
+        <a class="btn" href="#seats">다른 좌석 보기</a>
+      </div>
+      <footer>Static HTML prototype · Spring Boot API 연동 전 화면 시안</footer>
+    </section>
+  </main>
+</body>
+</html>

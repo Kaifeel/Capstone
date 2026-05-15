@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StagePass - 좌석 선택</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="index.html">
+        <span class="mark">S</span>
+        <span>StagePass</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">공연</a>
+        <a href="queue.html">대기열</a>
+        <a href="seats.html">좌석</a>
+        <a href="payment.html">결제</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="screen-title">
+      <div>
+        <h2>좌석 선택</h2>
+        <p class="muted">파란색 좌석 A07이 선택된 상태입니다. 결제 전까지 좌석은 HOLD로 유지됩니다.</p>
+      </div>
+      <a class="btn" href="queue.html">대기열 보기</a>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div class="stage">STAGE</div>
+        <div class="seat-map">
+          <div class="seat-row">
+            <span class="row-label">A</span>
+            <a class="seat available" href="payment.html">1</a>
+            <a class="seat available" href="payment.html">2</a>
+            <span class="seat reserved">3</span>
+            <a class="seat available" href="payment.html">4</a>
+            <span class="seat hold">5</span>
+            <a class="seat available" href="payment.html">6</a>
+            <a class="seat selected" href="payment.html">7</a>
+            <a class="seat available" href="payment.html">8</a>
+            <span class="seat reserved">9</span>
+            <a class="seat available" href="payment.html">10</a>
+            <a class="seat available" href="payment.html">11</a>
+            <a class="seat available" href="payment.html">12</a>
+          </div>
+          <div class="seat-row">
+            <span class="row-label">B</span>
+            <a class="seat available" href="payment.html">1</a>
+            <span class="seat reserved">2</span>
+            <a class="seat available" href="payment.html">3</a>
+            <a class="seat available" href="payment.html">4</a>
+            <a class="seat available" href="payment.html">5</a>
+            <span class="seat hold">6</span>
+            <a class="seat available" href="payment.html">7</a>
+            <a class="seat available" href="payment.html">8</a>
+            <a class="seat available" href="payment.html">9</a>
+            <span class="seat reserved">10</span>
+            <a class="seat available" href="payment.html">11</a>
+            <a class="seat available" href="payment.html">12</a>
+          </div>
+          <div class="seat-row">
+            <span class="row-label">C</span>
+            <a class="seat available" href="payment.html">1</a>
+            <a class="seat available" href="payment.html">2</a>
+            <a class="seat available" href="payment.html">3</a>
+            <span class="seat reserved">4</span>
+            <a class="seat available" href="payment.html">5</a>
+            <a class="seat available" href="payment.html">6</a>
+            <span class="seat hold">7</span>
+            <a class="seat available" href="payment.html">8</a>
+            <a class="seat available" href="payment.html">9</a>
+            <a class="seat available" href="payment.html">10</a>
+            <a class="seat available" href="payment.html">11</a>
+            <span class="seat reserved">12</span>
+          </div>
+          <div class="seat-row">
+            <span class="row-label">D</span>
+            <a class="seat available" href="payment.html">1</a>
+            <a class="seat available" href="payment.html">2</a>
+            <a class="seat available" href="payment.html">3</a>
+            <a class="seat available" href="payment.html">4</a>
+            <a class="seat available" href="payment.html">5</a>
+            <a class="seat available" href="payment.html">6</a>
+            <a class="seat available" href="payment.html">7</a>
+            <span class="seat reserved">8</span>
+            <a class="seat available" href="payment.html">9</a>
+            <a class="seat available" href="payment.html">10</a>
+            <span class="seat hold">11</span>
+            <a class="seat available" href="payment.html">12</a>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i style="background: var(--green-soft); border: 1px solid #8fd8a9;"></i>예매 가능</span>
+          <span><i style="background: var(--blue);"></i>선택</span>
+          <span><i style="background: var(--amber-soft); border: 1px solid #f1c66b;"></i>결제 대기</span>
+          <span><i style="background: var(--red-soft); border: 1px solid #f3a8a8;"></i>예매 완료</span>
+        </div>
+      </div>
+
+      <aside class="panel summary">
+        <h3>선택 정보</h3>
+        <div class="summary-row">
+          <span>공연</span>
+          <b>Midnight Echo Live</b>
+        </div>
+        <div class="summary-row">
+          <span>좌석</span>
+          <b>A구역 7번</b>
+        </div>
+        <div class="summary-row">
+          <span>상태</span>
+          <b>HOLD</b>
+        </div>
+        <div class="summary-row">
+          <span>남은 결제 시간</span>
+          <b>04:58</b>
+        </div>
+        <div class="summary-row">
+          <span>가격</span>
+          <b>154,000원</b>
+        </div>
+        <p class="total">154,000원</p>
+        <div style="margin-top: 18px;">
+          <a class="btn primary" href="payment.html">결제하기</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

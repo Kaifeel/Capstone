@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StagePass - 결제</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="index.html">
+        <span class="mark">S</span>
+        <span>StagePass</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">공연</a>
+        <a href="queue.html">대기열</a>
+        <a href="seats.html">좌석</a>
+        <a href="payment.html">결제</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="screen-title">
+      <div>
+        <h2>결제</h2>
+        <p class="muted">Mock 결제 화면입니다. 실제 카드 정보는 수집하지 않습니다.</p>
+      </div>
+      <a class="btn" href="seats.html">좌석 다시 선택</a>
+    </div>
+
+    <div class="pay-grid">
+      <div class="panel">
+        <h3>결제 수단</h3>
+        <div class="pay-method">
+          <a class="method selected" href="complete.html">
+            <span>간편 결제</span>
+            <span>선택됨</span>
+          </a>
+          <a class="method" href="complete.html">
+            <span>신용카드</span>
+            <span>선택</span>
+          </a>
+          <a class="method" href="complete.html">
+            <span>무통장 입금</span>
+            <span>선택</span>
+          </a>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <h3>결제 요약</h3>
+        <div class="summary-row">
+          <span>예약 번호</span>
+          <b>R-20260515-0007</b>
+        </div>
+        <div class="summary-row">
+          <span>예매 상태</span>
+          <b>PENDING</b>
+        </div>
+        <div class="summary-row">
+          <span>좌석 상태</span>
+          <b>HOLD</b>
+        </div>
+        <div class="summary-row">
+          <span>결제 금액</span>
+          <b>154,000원</b>
+        </div>
+        <p class="total">154,000원</p>
+        <div style="margin-top: 18px;">
+          <a class="btn primary" href="complete.html">Mock 결제 완료</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

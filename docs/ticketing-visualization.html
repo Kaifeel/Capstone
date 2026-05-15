@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ticketing System Visualization</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --text: #17202a;
+      --muted: #687385;
+      --line: #d9dee7;
+      --blue: #2563eb;
+      --green: #15803d;
+      --red: #dc2626;
+      --amber: #b45309;
+      --ink: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+    }
+
+    nav {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    nav strong {
+      font-size: 17px;
+      color: var(--ink);
+    }
+
+    nav a,
+    .pager a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    nav .links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 26px 20px 48px;
+    }
+
+    section {
+      min-height: calc(100vh - 72px);
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 76px;
+    }
+
+    h1,
+    h2 {
+      margin: 0 0 12px;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+
+    h1 {
+      font-size: clamp(30px, 6vw, 58px);
+      max-width: 780px;
+    }
+
+    h2 {
+      font-size: 30px;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      max-width: 780px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 22px 0;
+    }
+
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+      min-height: 112px;
+    }
+
+    .box b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .flow {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      flex: 1 1 150px;
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 16px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .arrow {
+      align-self: center;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .green {
+      border-color: #86efac;
+      color: var(--green);
+    }
+
+    .amber {
+      border-color: #fcd34d;
+      color: var(--amber);
+    }
+
+    .red {
+      border-color: #fca5a5;
+      color: var(--red);
+    }
+
+    .blue {
+      border-color: #93c5fd;
+      color: var(--blue);
+    }
+
+    .diagram {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .layer {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+
+    .layer ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .note {
+      border-left: 4px solid var(--blue);
+      background: #eff6ff;
+      padding: 14px 16px;
+      border-radius: 6px;
+      color: #1e3a8a;
+      margin: 18px 0;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    @media (max-width: 760px) {
+      .grid,
+      .diagram {
+        grid-template-columns: 1fr;
+      }
+
+      .arrow {
+        width: 100%;
+        text-align: center;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <strong>Ticketing Visualization</strong>
+      <div class="links">
+        <a href="#overview">개요</a>
+        <a href="#architecture">구조</a>
+        <a href="#queue">대기열</a>
+        <a href="#reservation">예매</a>
+        <a href="#monitoring">검증</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="overview">
+      <h1>대규모 트래픽 대응 콘서트 티켓 예매 백엔드</h1>
+      <p>동시에 몰리는 사용자를 Redis 대기열로 제어하고, 좌석 중복 예매는 락과 트랜잭션으로 방지하는 Spring Boot 기반 시스템입니다.</p>
+
+      <div class="grid">
+        <div class="box">
+          <b>핵심 문제</b>
+          같은 좌석을 여러 사용자가 동시에 예매하려는 상황
+        </div>
+        <div class="box">
+          <b>해결 방식</b>
+          대기열, 좌석 HOLD, 비관적/낙관적 락
+        </div>
+        <div class="box">
+          <b>검증 방식</b>
+          JUnit 동시성 테스트, k6 부하 테스트, Grafana 모니터링
+        </div>
+      </div>
+
+      <div class="pager">
+        <span></span>
+        <a href="#architecture">다음: 전체 구조</a>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2>전체 구조</h2>
+      <p>사용자는 API 서버로 접근하고, 핵심 데이터는 PostgreSQL에 저장합니다. Redis는 대기열과 입장 토큰을 관리하며, Prometheus와 Grafana는 운영 지표를 확인합니다.</p>
+
+      <div class="diagram">
+        <div class="layer">
+          <b>Client</b>
+          <ul>
+            <li>회원가입 / 로그인</li>
+            <li>공연 조회</li>
+            <li>대기열 진입</li>
+            <li>좌석 예매</li>
+          </ul>
+        </div>
+        <div class="layer">
+          <b>Spring Boot API</b>
+          <ul>
+            <li>JWT 인증</li>
+            <li>예매 트랜잭션</li>
+            <li>좌석 상태 변경</li>
+            <li>Mock 결제</li>
+          </ul>
+        </div>
+        <div class="layer">
+          <b>Data / Infra</b>
+          <ul>
+            <li>PostgreSQL</li>
+            <li>Redis</li>
+            <li>Prometheus</li>
+            <li>Grafana</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pager">
+        <a href="#overview">이전: 개요</a>
+        <a href="#queue">다음: 대기열</a>
+      </div>
+    </section>
+
+    <section id="queue">
+      <h2>Redis 대기열 흐름</h2>
+      <p>예매 API로 모든 요청을 바로 보내지 않고, Redis Sorted Set으로 순번을 관리한 뒤 입장 가능한 사용자만 예매를 시도하게 합니다.</p>
+
+      <div class="flow">
+        <div class="step blue">대기열 진입</div>
+        <div class="arrow">→</div>
+        <div class="step blue">순번 조회</div>
+        <div class="arrow">→</div>
+        <div class="step green">입장 허용</div>
+        <div class="arrow">→</div>
+        <div class="step green">entryToken 발급</div>
+        <div class="arrow">→</div>
+        <div class="step amber">예매 API 호출</div>
+      </div>
+
+      <div class="note">효과: DB row lock 경합을 줄이고, 사용자에게 공정한 대기 순서를 제공합니다.</div>
+
+      <div class="pager">
+        <a href="#architecture">이전: 전체 구조</a>
+        <a href="#reservation">다음: 예매 상태</a>
+      </div>
+    </section>
+
+    <section id="reservation">
+      <h2>예매와 좌석 상태</h2>
+      <p>좌석은 결제 전에는 HOLD 상태가 되고, 결제가 성공하면 RESERVED가 됩니다. 결제 실패나 시간 초과가 발생하면 다시 AVAILABLE로 복구됩니다.</p>
+
+      <div class="flow">
+        <div class="step green">AVAILABLE</div>
+        <div class="arrow">→</div>
+        <div class="step amber">HOLD</div>
+        <div class="arrow">→</div>
+        <div class="step blue">RESERVED</div>
+      </div>
+
+      <div class="flow">
+        <div class="step amber">PENDING</div>
+        <div class="arrow">→</div>
+        <div class="step blue">CONFIRMED</div>
+        <div class="arrow">또는</div>
+        <div class="step red">CANCELLED / EXPIRED</div>
+      </div>
+
+      <div class="note">동시 요청이 같은 좌석에 몰려도 비관적 락 또는 낙관적 락으로 활성 예매는 1건만 남도록 검증합니다.</div>
+
+      <div class="pager">
+        <a href="#queue">이전: 대기열</a>
+        <a href="#monitoring">다음: 검증</a>
+      </div>
+    </section>
+
+    <section id="monitoring">
+      <h2>부하 테스트와 모니터링</h2>
+      <p>k6로 같은 좌석 집중 예매, 다중 좌석 예매, 대기열 흐름을 테스트하고 Prometheus/Grafana로 API와 인프라 지표를 확인합니다.</p>
+
+      <div class="grid">
+        <div class="box">
+          <b>k6</b>
+          동시 사용자 요청과 예매 성공/실패 흐름 확인
+        </div>
+        <div class="box">
+          <b>Prometheus</b>
+          Actuator, Redis exporter, Prometheus 자체 지표 수집
+        </div>
+        <div class="box">
+          <b>Grafana</b>
+          요청량, p95 지연시간, 5xx 비율, Redis, JVM, DB 커넥션 확인
+        </div>
+      </div>
+
+      <div class="note">발표 핵심 문장: 대기열로 진입량을 조절하고, 락으로 좌석 정합성을 보장하며, 부하 테스트와 모니터링으로 결과를 검증했습니다.</div>
+
+      <div class="pager">
+        <a href="#reservation">이전: 예매 상태</a>
+        <a href="#overview">처음으로</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
